@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { createIssueSchema } from "@/app/validationSchema";
 import ErrorMessage from "@/app/components/ErrorMessage";
+import Spinner from "@/app/components/Spinner";
 
 type IssueForm = z.infer<typeof createIssueSchema>;
 
@@ -18,6 +19,7 @@ const NewIssuePage = () => {
 
     const router = useRouter()
     const [error, setError] = useState('');
+    const [isSubmitting, setSubmitting] = useState(false);
 
     const {
         register,
@@ -28,6 +30,18 @@ const NewIssuePage = () => {
             resolver: zodResolver(createIssueSchema)
         });
     
+    const submitNewIssue = handleSubmit(async (data) => {
+        try {
+            setSubmitting(true)
+            await axios.post('/api/issues', data);
+            router.push('/issues');
+        } catch (error) {
+            setSubmitting(false);
+            setError('An un expected error occured');
+        }
+                    
+    });
+    
     return (
         <div className="max-w-xl space-y-4">
            {error && <Callout.Root color="red">
@@ -37,15 +51,7 @@ const NewIssuePage = () => {
              </Callout.Root>}
            
             <form className="max-w-xl space-y-4"
-                onSubmit={handleSubmit(async (data) => {
-                    try {
-                        await axios.post('/api/issues', data);
-                        router.push('/issues');
-                    } catch (error) {
-                        setError('An un expected error occured');
-                    }
-                    
-                })}>
+                onSubmit={submitNewIssue}>
                 <TextField.Root>
                     <TextField.Input placeholder="Title" {...register('title')} />
                 </TextField.Root>
@@ -60,8 +66,9 @@ const NewIssuePage = () => {
                         <ErrorMessage>
                         {errors.description?.message}
                         </ErrorMessage>
-                <Button disabled={!isValid}>
+                <Button disabled={!isValid || isSubmitting} >
                     Submit New Issue
+                    {isSubmitting &&  <Spinner/>}
                 </Button>
             </form>
         </div>
