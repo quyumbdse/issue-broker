@@ -1,7 +1,13 @@
+'use client'
 import Link from "next/link";
-import { GiLongAntennaeBug } from "react-icons/gi";;
+import { usePathname } from "next/navigation";
+import { GiLongAntennaeBug } from "react-icons/gi";
+import classnames from 'classnames';
+
 
 const NavBar = () => {
+
+    const currentPath = usePathname();
 
     const links = [
         { label: 'Dashboard', href: '/' },
@@ -14,8 +20,15 @@ const NavBar = () => {
             <ul className="flex space-x-8">
                 {links.map(link => (
                     <li key={link.href}>
-                        <Link className=
-                            "text-lg text-zinc-500 hover:text-teal-900 transition-colors" href={link.href}>{link.label}</Link></li>
+                        <Link className={classnames({
+                            'text-teal-900': link.href === currentPath,
+                            'text-zinc-500': link.href !== currentPath,
+                            'hover:text-teal-600 transition-colors': true,
+                            'text-lg' : true,
+                        })} 
+                        href={link.href}>{link.label}
+                        </Link>
+                    </li>
                 ))}
             </ul>
         </nav>
