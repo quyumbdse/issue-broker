@@ -1,11 +1,11 @@
 
-import { Button, Container, Table, TableColumnHeaderCell } from '@radix-ui/themes'
-import Link from 'next/link';
+import { Table, TableColumnHeaderCell } from '@radix-ui/themes'
 import prisma from '@/prisma/client';
 import React from 'react'
 import IssueStatusBadge from '../components/IssueStatusBadge';
 import delay from 'delay';
 import CreateNewIssueButton from './CreateNewIssueButton';
+import Link from '../components/Link';
 
 const IssuesPage = async () => {
 
