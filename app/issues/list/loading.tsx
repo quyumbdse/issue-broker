@@ -1,8 +1,6 @@
 import { Table, TableColumnHeaderCell } from '@radix-ui/themes'
-import Skeleton from 'react-loading-skeleton'
-import 'react-loading-skeleton/dist/skeleton.css'
-import IssueStatusBadge from '../components/IssueStatusBadge'
-import CreateNewIssueButton from './CreateNewIssueButton';
+import CreateNewIssueButton from '../_components/CreateNewIssueButton';
+import { Skeleton }from '../../components';
 
 const LoadingIssuePage = () => {
 

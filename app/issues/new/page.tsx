@@ -10,11 +10,13 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { createIssueSchema } from "@/app/validationSchema";
 import ErrorMessage from "@/app/components/ErrorMessage";
-import Spinner from "@/app/components/Spinner";
+import {Spinner} from "@/app/components";
 import dynamic from 'next/dynamic';
+import delay from 'delay'
 
 const SimpleMDE = dynamic(() =>
-    import('react-simplemde-editor'), { ssr: false })
+    import('react-simplemde-editor'),
+    { ssr: false });
 
 type IssueForm = z.infer<typeof createIssueSchema>;
 
@@ -34,6 +36,7 @@ const NewIssuePage = () => {
         });
     
     const submitNewIssue = handleSubmit(async (data) => {
+        
         try {
             setSubmitting(true)
             await axios.post('/api/issues', data);
@@ -41,10 +44,11 @@ const NewIssuePage = () => {
         } catch (error) {
             setSubmitting(false);
             setError('An un expected error occured');
-        }               
+        }      
     });
     
     return (
+    
         <div className="max-w-xl space-y-4">
            {error && <Callout.Root color="red">
                 <Callout.Text >
