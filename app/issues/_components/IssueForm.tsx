@@ -8,17 +8,13 @@ import { z } from 'zod';
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { createIssueSchema } from "@/app/validationSchema";
+import { issueSchema } from "@/app/validationSchema";
 import ErrorMessage from "@/app/components/ErrorMessage";
 import {Spinner} from "@/app/components";
-import dynamic from 'next/dynamic';
+import SimpleMDE from "react-simplemde-editor";
 import { Issue } from "@prisma/client";
 
-const SimpleMDE = dynamic(() =>
-    import('react-simplemde-editor'),
-    { ssr: false });
-
-type IssueFormData = z.infer<typeof createIssueSchema>;
+type IssueFormData = z.infer<typeof issueSchema>;
 
 const IssueForm = ({issue}: {issue?: Issue}) => {
 
@@ -32,14 +28,17 @@ const IssueForm = ({issue}: {issue?: Issue}) => {
         handleSubmit,
         formState: { errors, isValid } } =
         useForm<IssueFormData>({
-            resolver: zodResolver(createIssueSchema)
+            resolver: zodResolver(issueSchema)
         });
     
     const submitNewIssue = handleSubmit(async (data) => {
         
         try {
-            setSubmitting(true)
-            await axios.post('/api/issues', data);
+            setSubmitting(true);
+            if (issue)
+              await axios.patch('/api/issues' + issue.id, data);
+            else 
+              await axios.post('/api/issues', data);
             router.push('/issues');
         } catch (error) {
             setSubmitting(false);
@@ -50,36 +49,36 @@ const IssueForm = ({issue}: {issue?: Issue}) => {
     return (
     
         <div className="max-w-xl space-y-4">
-           {error && <Callout.Root color="red">
+            {error && <Callout.Root color="red">
                 <Callout.Text >
                     {error}
                 </Callout.Text>
-             </Callout.Root>}
+            </Callout.Root>}
            
             <form className="max-w-xl space-y-4"
                 onSubmit={submitNewIssue}>
                 <TextField.Root>
                     <TextField.Input defaultValue={issue?.title} placeholder="Title" {...register('title')} />
                 </TextField.Root>
-                    <ErrorMessage>
-                        {errors.title?.message}
-                    </ErrorMessage>
+                <ErrorMessage>
+                    {errors.title?.message}
+                </ErrorMessage>
                 <Controller
                     name='description'
                     control={control}
                     defaultValue={issue?.description}
-                    render={({field}) =>
+                    render={({ field }) =>
                         <SimpleMDE placeholder="Description" {...field} />} />
-                        <ErrorMessage>
-                        {errors.description?.message}
-                        </ErrorMessage>
+                <ErrorMessage>
+                    {errors.description?.message}
+                </ErrorMessage>
                 <Button disabled={!isValid || isSubmitting} >
-                    Submit New Issue
-                    {isSubmitting &&  <Spinner/>}
+                    {issue ? 'Update Issue' : ' Submit New Issue'} {' '}
+                    {isSubmitting && <Spinner />}
                 </Button>
             </form>
         </div>
-    )
+    );
 };
 
 export default IssueForm
