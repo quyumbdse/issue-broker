@@ -4,11 +4,13 @@ import { usePathname } from "next/navigation";
 import { GiLongAntennaeBug } from "react-icons/gi";
 import classnames from 'classnames';
 import { Box, Container, Flex } from "@radix-ui/themes";
+import { useSession } from "next-auth/react";
 
 
 const NavBar = () => {
 
     const currentPath = usePathname();
+    const {status, data: session } = useSession();
 
     const links = [
         { label: 'Dashboard', href: '/' },
@@ -37,7 +39,10 @@ const NavBar = () => {
                         </ul>
                     </Flex>
                     <Box>
-                       <Link href=''>Login</Link>
+                        {status === 'authenticated' &&
+                            (<Link href='/api/auth/signout'>Logout</Link>)}
+                        {status === 'unauthenticated' &&
+                            (<Link href='/api/auth/signin'>Login</Link>)}
                     </Box>
                 </Flex>
             </Container> 
