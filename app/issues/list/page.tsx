@@ -3,7 +3,7 @@ import { Table, TableColumnHeaderCell } from '@radix-ui/themes'
 import prisma from '@/prisma/client';
 import React from 'react'
 import {IssueStatusBadge, Link} from '@/app/components';
-import CreateNewIssueButton from '../_components/CreateNewIssueButton';
+import IssueActions from './IssueActions';
 
 const IssuesPage = async () => {
 
@@ -12,7 +12,7 @@ const IssuesPage = async () => {
   return (
     <div className='space-y-5'>
       <div>
-         <CreateNewIssueButton/>
+         <IssueActions/>
       </div>
     
       <Table.Root variant='surface'>

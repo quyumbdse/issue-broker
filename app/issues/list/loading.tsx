@@ -1,5 +1,5 @@
 import { Table, TableColumnHeaderCell } from '@radix-ui/themes'
-import CreateNewIssueButton from '../_components/CreateNewIssueButton';
+import CreateNewIssueButton from './IssueActions';
 import { Skeleton }from '../../components';
 
 const LoadingIssuePage = () => {
