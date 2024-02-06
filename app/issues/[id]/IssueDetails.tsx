@@ -6,7 +6,7 @@ import ReactMarkDown from "react-markdown";
 const IssueDetails = ({ issue }: { issue: Issue }) => {
     
     return (
-        <>
+        <div className='space-y-4'>
             <Heading>{issue.title}</Heading>
             <Flex gap='4'>
                 <IssueStatusBadge status={issue.status} />
@@ -15,7 +15,7 @@ const IssueDetails = ({ issue }: { issue: Issue }) => {
             <Card className='prose max-w-full'>
                 <ReactMarkDown>{issue.description}</ReactMarkDown>
             </Card>
-        </>
+        </div>
     );
 };
 
