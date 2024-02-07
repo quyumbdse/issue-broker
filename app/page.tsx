@@ -4,3 +4,5 @@ export default function Home() {
     <div className="text-xl">hello world</div>
   );
 }
+
+export const dynamic = 'force-dynamic';
