@@ -1,6 +1,6 @@
 import { Table, TableColumnHeaderCell } from '@radix-ui/themes'
 import CreateNewIssueButton from './IssueActions';
-import { Skeleton }from '../../components';
+import { Skeleton }from '@/app/components';
 
 const LoadingIssuePage = () => {
 
@@ -19,12 +19,12 @@ const LoadingIssuePage = () => {
         <Table.Body>
           {issues.map(issue => <Table.Row key={issue}>
             <Table.Cell>
-              <Skeleton />
-              <div className='block md:hidden'><Skeleton />
+              <Skeleton height='2rem'/>
+              <div className='block md:hidden'><Skeleton height='2rem'/>
               </div>
             </Table.Cell>
-            <Table.Cell className='hidden md:table-cell'><Skeleton /></Table.Cell>
-            <Table.Cell className='hidden md:table-cell'><Skeleton /></Table.Cell>
+            <Table.Cell className='hidden md:table-cell'><Skeleton height='2rem'/></Table.Cell>
+            <Table.Cell className='hidden md:table-cell'><Skeleton height='2rem'/></Table.Cell>
           </Table.Row>)}
         </Table.Body>
       </Table.Root>

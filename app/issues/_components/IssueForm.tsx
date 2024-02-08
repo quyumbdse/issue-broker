@@ -87,12 +87,12 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
                             <Controller
                                 name='status'
                                 control={control}
-                                defaultValue={issue?.status}
                                 render={({ field }) =>
-                                    <Select.Root onValueChange={field.onChange} {...field} >
-                                        <Select.Trigger placeholder="Select Status" />
+                                    <Select.Root onValueChange={field.onChange}  defaultValue={issue?.status} >
+                                        <Select.Trigger />
                                         <Select.Content>
                                             <Select.Group>
+                                                <Select.Label>Select Status</Select.Label>
                                                 {statases.map(status =>
                                                     <Select.Item key={status.value}
                                                         value={status.value}>{status.label}</Select.Item>)}
@@ -106,5 +106,13 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
         </>
     );
 };
+
+//  {issue && <select {...register("status")} >
+//                           <option value="">{ issue.status}</option>
+//                             {statases.map(status =>
+//                               <option key={status.value}
+//                                   value={status.value}>{status.label}
+//                               </option>)}
+//                         </select>}
 
 export default IssueForm
