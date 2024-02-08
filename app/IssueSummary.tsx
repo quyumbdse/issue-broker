@@ -7,7 +7,8 @@ interface Props {
     open: number;
     inProgress: number;
     closed: number
-}
+};
+
 const IssueSummary = ({open, inProgress, closed}: Props) => {
     const containers: {
         label: string;
