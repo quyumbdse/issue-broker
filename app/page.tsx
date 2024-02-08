@@ -1,7 +1,8 @@
+import LatestIssues from "./LatestIssues";
 
 export default function Home() {
   return (
-    <div className="text-xl">hello world</div>
+    <LatestIssues/>
   );
 }
 
