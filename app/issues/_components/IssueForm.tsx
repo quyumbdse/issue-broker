@@ -99,20 +99,12 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
                                             </Select.Group>
                                         </Select.Content>
                                     </Select.Root>
-                                } />}
+                            } />}
                     </Box>
                 </Grid>
             </form>
         </>
     );
 };
-
-//  {issue && <select {...register("status")} >
-//                           <option value="">{ issue.status}</option>
-//                             {statases.map(status =>
-//                               <option key={status.value}
-//                                   value={status.value}>{status.label}
-//                               </option>)}
-//                         </select>}
 
 export default IssueForm

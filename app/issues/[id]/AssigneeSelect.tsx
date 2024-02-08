@@ -4,9 +4,12 @@ import { Issue, User } from '@prisma/client';
 import { Select } from '@radix-ui/themes'
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 import toast, { Toaster } from 'react-hot-toast';
 
 const AssigneeSelect = ({ issue }: { issue: Issue }) => {
+
+    const router = useRouter();
 
     const { data: users, error, isLoading } = useUsers();
 
@@ -14,26 +17,36 @@ const AssigneeSelect = ({ issue }: { issue: Issue }) => {
     
     if (error) return null;
 
-    const assignIssue = (userId: string) => {
-        axios.patch('/api/issues/' + issue.id,
-            {
-                assignedToUserId: userId
-                    === "unassigned" ? null : userId,
-            }).catch(() => {
-                toast.error('Changes Could not saved.')
-        });
+    const assigneSelect = (userId: string) => {
+             if (issue.assignedToUserId === null && issue.status !== 'CLOSED')
+            axios.patch('/api/issues/' + issue.id,
+                {
+                    assignedToUserId: userId || null,
+                }).catch(() => {
+                    toast.error('Changes Could not saved.')
+                })
+                .then(() => {
+                    axios.patch('/api/issues/' + issue.id,
+                        {
+                            status: 'IN_PROGRESS'
+                        });
+                    router.push('/issues/list');
+                    router.refresh()
+                });
+                
+        
     };
     
     return (
         <>
             <Select.Root
-                defaultValue={issue.assignedToUserId || "unassigned"}
-                onValueChange={assignIssue}>
-                <Select.Trigger/>
+                defaultValue={issue.assignedToUserId || ""}
+                onValueChange={assigneSelect}>
+                <Select.Trigger />
                 <Select.Content>
                     <Select.Group>
                         <Select.Label>Suggestion</Select.Label>
-                        <Select.Item value="unassigned">Unassigned</Select.Item>
+                        <Select.Item value="">Unassigned</Select.Item>
                         {users?.map(user =>
                             <Select.Item key={user.id}
                                 value={user.id}>{user.name}</Select.Item>)}
