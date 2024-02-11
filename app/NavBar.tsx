@@ -34,7 +34,8 @@ const NavLinks = () => {
 
     const links = [
         { label: 'Dashboard', href: '/' },
-        { label: 'Issues', href: '/issues/list' }
+        { label: 'Issues', href: '/issues/list' },
+        { label: 'Admin', href: '/admin' }
     ];
 
     return (
@@ -55,7 +56,7 @@ const NavLinks = () => {
 
 const AuthStatus = () => {
     const { status, data: session } = useSession();
-    
+
     if (status === 'loading') return <Skeleton width='3rem'/>
     
     if (status === 'unauthenticated')
@@ -66,11 +67,12 @@ const AuthStatus = () => {
             <DropdownMenu.Root>
                  <DropdownMenu.Trigger>
                     <Avatar
-                        src={session!.user!.image!}
+                        src={session!.user!.image}
                         fallback='?'
                         size='2'
                         radius="full"
-                        className="cursor-pointer" />
+                        className="cursor-pointer"
+                        referrerPolicy="no-referrer"/>
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Content>
                     <DropdownMenu.Label>

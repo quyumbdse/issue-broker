@@ -41,7 +41,7 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
         try {
             setSubmitting(true);
             if (issue)
-                await axios.patch('/api/issues/' + issue.id, data);
+                await axios.patch('/api/issues/' + issue.id, {status: 'CLOSED', data});
             else
                 await axios.post('/api/issues', data);
             router.push('/issues/list');
@@ -81,25 +81,6 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
                             {issue ? 'Update Issue' : ' Submit New Issue'} {' '}
                             {isSubmitting && <Spinner />}
                         </Button>
-                    </Box>
-                    <Box>
-                        {issue &&
-                            <Controller
-                                name='status'
-                                control={control}
-                                render={({ field }) =>
-                                    <Select.Root onValueChange={field.onChange}  defaultValue={issue?.status} >
-                                        <Select.Trigger />
-                                        <Select.Content>
-                                            <Select.Group>
-                                                <Select.Label>Select Status</Select.Label>
-                                                {statases.map(status =>
-                                                    <Select.Item key={status.value}
-                                                        value={status.value}>{status.label}</Select.Item>)}
-                                            </Select.Group>
-                                        </Select.Content>
-                                    </Select.Root>
-                            } />}
                     </Box>
                 </Grid>
             </form>

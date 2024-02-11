@@ -65,10 +65,17 @@ model User {
   name           String?
   email          String?   @unique
   emailVerified  DateTime?
+  hashedPassword  String?
   image          String?
+  role           UserRole  @default(USER)
   accounts       Account[]
   sessions       Session[]
   assignedIssues Issue[]
+}
+
+enum UserRole {
+  ADMIN
+  USER
 }
 
 model VerificationToken {

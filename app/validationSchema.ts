@@ -1,11 +1,10 @@
-import { Status } from "@prisma/client";
+import { Status, UserRole } from "@prisma/client";
 import { z } from "zod";
 
 export const issueSchema = z.object({
     title: z.string().min(1, 'Title is required').max(255),
     description: z.string().min(1, 'Description is required').max(36535)
 });
-
 
 export const patchIssueSchema = z.object({
     title: z
@@ -28,4 +27,12 @@ export const patchIssueSchema = z.object({
         .enum([Status.CLOSED, Status.IN_PROGRESS, Status.OPEN])
         .optional(),
     
+});
+
+export const userSchema = z.object({
+    name: z.string().min(1, 'Name is required').max(255),
+    email: z.string().min(1, 'Email is required').max(255),
+    role: z.enum([UserRole.USER, UserRole.ADMIN]).optional(),
+    image: z.string().min(1).max(255).optional(),
+    emailVerified: z.string().min(1).max(255).optional(),
 });

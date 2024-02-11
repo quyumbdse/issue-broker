@@ -50,7 +50,9 @@ CREATE TABLE `User` (
     `name` VARCHAR(191) NULL,
     `email` VARCHAR(191) NULL,
     `emailVerified` DATETIME(3) NULL,
+    `hashedPassword` VARCHAR(191) NULL,
     `image` VARCHAR(191) NULL,
+    `role` ENUM('ADMIN', 'USER') NOT NULL DEFAULT 'USER',
 
     UNIQUE INDEX `User_email_key`(`email`),
     PRIMARY KEY (`id`)
