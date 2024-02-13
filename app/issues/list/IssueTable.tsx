@@ -13,17 +13,19 @@ export interface IssueQuery {
 
 interface Props {
   searchParams: IssueQuery,
-  issues: Issue[]   
+    issues: Issue[]   
 };
 
-const IssueTable = ({searchParams, issues}: Props) => {
+const IssueTable = async ({ searchParams, issues }: Props) => {
+
     return (
         <Table.Root variant='surface'>
             <Table.Header>
                 <Table.Row>
                     {columns.map(column => (
-                        <TableColumnHeaderCell key={column.value} className={column.className}>
+                        <TableColumnHeaderCell key={column.id} className={column.className}>
                             {column.label}
+                            
                             <NextLink href={{
                                 query: { ...searchParams, orderBy: column.value, sort: 'asc' }
                             }}><ArrowUpIcon className='inline nav-link' /></NextLink>
@@ -45,16 +47,18 @@ const IssueTable = ({searchParams, issues}: Props) => {
                     </Table.Cell>
                     <Table.Cell className='hidden md:table-cell'><IssueStatusBadge status={issue.status} /></Table.Cell>
                     <Table.Cell className='hidden md:table-cell'>{issue.createdAt.toDateString()}</Table.Cell>
+                    {/* <Table.Cell className='hidden md:table-cell'>{issue.assignedToUser!.name}</Table.Cell> */}
                 </Table.Row>)}
             </Table.Body>
         </Table.Root>
     );
 };
 
- const columns: { label: string; value: keyof Issue; className?: string }[] = [
-        { label: 'Issue', value: 'title' },
-        { label: 'Status', value: 'status', className: 'hidden md:table-cell' },
-        { label: 'Created', value: 'createdAt', className: 'hidden md:table-cell' }
+ const columns: {id: number, label: string; value?: keyof Issue; className?: string }[] = [
+        { id: 1, label: 'Issue', value: 'title' },
+        { id: 2, label: 'Status', value: 'status', className: 'hidden md:table-cell' },
+        { id: 3, label: 'Created', value: 'createdAt', className: 'hidden md:table-cell' },
+        // { id: 4, label: 'AssignTo', className: 'hidden md:table-cell' }
     ];
 
 export const columnNames = columns.map(column => column.value);

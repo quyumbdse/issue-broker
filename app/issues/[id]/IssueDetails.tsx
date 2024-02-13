@@ -1,3 +1,4 @@
+import authOptions from '@/app/auth/authOptions';
 import { IssueStatusBadge } from '@/app/components';
 import { Issue } from '@prisma/client';
 import { Flex, Text, Heading, Card } from '@radix-ui/themes'
@@ -6,6 +7,7 @@ import ReactMarkDown from "react-markdown";
 const IssueDetails = ({ issue }: { issue: Issue }) => {
     
     return (
+    
         <div className='space-y-4'>
             <Heading>{issue.title}</Heading>
             <Flex gap='4'>

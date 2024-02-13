@@ -14,30 +14,45 @@ interface Props {
 }
 
 const fetchIssue = cache((issueId: number) =>
-    prisma.issue.findUnique({ where: { id: issueId } }));
+    prisma.issue.findUnique({ where: { id: issueId }}));
     
 const IssueDetailPage = async ({ params }: Props) => {
   
     const session = await getServerSession(authOptions);
-
     const issue = await fetchIssue(parseInt(params.id));
    
     if (!issue)
         return notFound();
     
     return (
-        <Grid columns={{ initial: '1', sm: '4' }} gap='5'>
+        
+        <> 
+            < Grid columns={{ initial: '1', sm: '4' }} gap='5'>
             <Box className="md:col-span-3">
                 <IssueDetails issue={issue} />
             </Box>
-            {(session) && (<Box>
+                {
+                (session!.user.id === issue.assignedToUserId)
+                    && 
+                    (<Box>
                 <Flex direction='column' gap='3'>
-                    <AssigneeSelect issue={issue}/>
+                    <AssigneeSelect issue={issue} />
                     <EditIssueButton issueId={issue.id} />
-                    <DeleteIssueButton issueId={issue.id}/>
+                    <DeleteIssueButton issueId={issue.id} />
                 </Flex>
-            </Box>)}
-        </Grid>
+                    </Box>)}
+                {
+                    (session!.user.role === 'ADMIN') &&
+                     (<Box>
+                <Flex direction='column' gap='3'>
+                    <AssigneeSelect issue={issue} />
+                    <EditIssueButton issueId={issue.id} />
+                    <DeleteIssueButton issueId={issue.id} />
+                </Flex>
+                    </Box>)
+                }
+        </ Grid >
+        </>  
     );
 };
 

@@ -4,6 +4,7 @@ import { Issue, User } from '@prisma/client';
 import { Select } from '@radix-ui/themes'
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -12,6 +13,8 @@ const AssigneeSelect = ({ issue }: { issue: Issue }) => {
     const router = useRouter();
    
     const { data: users, error, isLoading } = useUsers();
+
+    const { data: session } = useSession();
 
     if (isLoading) return <Skeleton />
 
@@ -38,20 +41,20 @@ const AssigneeSelect = ({ issue }: { issue: Issue }) => {
     };
 
     return (
-        <>
-            {issue.assignedToUserId && <Select.Root
+        <> 
+            {session?.user.role!=='ADMIN' && issue.assignedToUserId && <Select.Root
                 defaultValue={issue.assignedToUserId}
                 onValueChange={assigneSelect}>
                 
                 <Select.Trigger />
                 <Select.Content>
                         {users?.map(user =>
-                            <Select.Item key={user.id}
+                            issue.assignedToUserId===user.id &&<Select.Item key={user.id}
                                 value={user.id}>{user.name}</Select.Item>)}
                 </Select.Content>
             </Select.Root>}
 
-            {!issue.assignedToUserId && <Select.Root
+            {session?.user.role==='ADMIN' && issue.assignedToUserId && <Select.Root
                 defaultValue={issue.assignedToUserId || ""}
                 onValueChange={assigneSelect}>
                 
@@ -61,7 +64,7 @@ const AssigneeSelect = ({ issue }: { issue: Issue }) => {
                         <Select.Label>Suggestion</Select.Label>
                         <Select.Item value="">Unassigned</Select.Item>
                         {users?.map(user =>
-                            <Select.Item key={user.id}
+                         <Select.Item key={user.id}
                                 value={user.id}>{user.name}</Select.Item>)}
                     </Select.Group>
                 </Select.Content>

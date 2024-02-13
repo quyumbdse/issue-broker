@@ -1,7 +1,7 @@
 import { User } from "@prisma/client"
 
 
-type Props = {
+interface  Props {
     user: User,
     pagetype: string,
 }

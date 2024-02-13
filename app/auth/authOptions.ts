@@ -8,32 +8,32 @@ import { NextAuthOptions  } from "next-auth";
 import bcrypt from 'bcrypt';
 import { UserRole } from "@prisma/client";
 
-
 const authOptions: NextAuthOptions = {
     adapter: PrismaAdapter(prisma),
     providers: [
         GoogleProvider({
-            clientId: process.env.GOOGLE_CLIENT_ID!,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-            profile(profile: GoogleProfile) {
+            profile(profile) {
                 return {
                     id: profile.sub,
-                    name: profile.name,
+                    name: `${profile.given_name}${profile.family_name}`,
                     email: profile.email,
-                    image: profile.avatar_url,
-                    role: UserRole.USER ?? profile.role,
+                    image: profile.picture,
+                    role: UserRole.USER,
+                    
                 }
-            }
+            },
+            clientId: process.env.GOOGLE_CLIENT_ID!,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
         }),
 
         GitHubProvider({
-            profile(profile: GithubProfile) {
+            profile(profile) {
                 return {
                     id: profile.id.toString(),
                     name: profile.name,
                     email: profile.email,
                     image: profile.avatar_url,
-                    role: UserRole.USER  ?? profile.role,
+                    role: UserRole.USER,
                 }
             },
             clientId: process.env.GITHUB_ID as string,
@@ -71,16 +71,25 @@ const authOptions: NextAuthOptions = {
 
     ],
     callbacks: {
-
-        async jwt({ token, user }) {
-            if (user) token.role = user.role;
+        async jwt({ token, user, session}) {
+            if (user)
+                return {
+                    ...token,
+                    id: user.id,
+                    role: user.role
+                }
             return token;
         },
         
         // way to put property into the session (db to jwt token to  session)
-        async session({ session, token }) {
-            if (session?.user) {
-                session.user.role = token.role
+        async session({ session, token, user }) {
+            if (session?.user) return {
+                ...session,
+                user: {
+                    ...session.user,
+                    id: token.id,
+                    role: token.role
+                }
             }
             return session
         },

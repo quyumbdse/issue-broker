@@ -3,9 +3,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { GiLongAntennaeBug } from "react-icons/gi";
 import classnames from 'classnames';
-import { Avatar, Box, Container, DropdownMenu, Flex } from "@radix-ui/themes";
+import { Avatar, Text, Box, Container, DropdownMenu, Flex } from "@radix-ui/themes";
 import { useSession } from "next-auth/react";
 import { Skeleton } from "./components";
+import { IoPersonCircleOutline } from "react-icons/io5";
 
 
 const NavBar = () => {
@@ -29,16 +30,17 @@ const NavBar = () => {
 };
 
 const NavLinks = () => {
-
+    const { status, data: session } = useSession();
     const currentPath = usePathname();
 
     const links = [
         { label: 'Dashboard', href: '/' },
         { label: 'Issues', href: '/issues/list' },
-        { label: 'Admin', href: '/admin' }
+        // { label: 'Admin', href: '/admin' }
     ];
 
     return (
+        <>
         <ul className="flex space-x-6">
             {links.map(link => (
                 <li key={link.href}>
@@ -50,7 +52,9 @@ const NavLinks = () => {
                     </Link>
                 </li>
             ))}
-        </ul>
+                {session && session?.user.role !== 'USER' && <li><Link href='/admin'>Admin</Link></li>}
+            </ul>
+        </>
     )
 };
 
@@ -65,14 +69,16 @@ const AuthStatus = () => {
     return (
         <Box>
             <DropdownMenu.Root>
-                 <DropdownMenu.Trigger>
+                <DropdownMenu.Trigger>
+                   <Text>
                     <Avatar
-                        src={session!.user!.image}
-                        fallback='?'
-                        size='2'
-                        radius="full"
-                        className="cursor-pointer"
-                        referrerPolicy="no-referrer"/>
+                            src={session!.user!.image}
+                            fallback=<IoPersonCircleOutline/>
+                            size='2'
+                            radius="full"
+                            className="cursor-pointer"
+                                referrerPolicy="no-referrer" />
+                    </Text>
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Content>
                     <DropdownMenu.Label>

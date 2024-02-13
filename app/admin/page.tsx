@@ -6,19 +6,17 @@ import { getServerSession } from 'next-auth'
 import authOptions from '../auth/authOptions'
 
 export default async function AdminPage() {
-    // const { data: session } = useSession({
-    //     required: true,
-    //     onUnauthenticated() {
-    //         redirect('/api/auth/signin?callbackUrl=/admin')
-    //     }
-    // })
+   
+    // const session = await getServerSession(authOptions);
 
-    const session = await getServerSession(authOptions);
-
-    console.log(session?.user)
-    if (session?.user.role)
+    // console.log(session?.user)
+    // if (!session) {
+    //     redirect('/api/auth/signin?callbackUrl=/admin')
+    // }
 
     return (
-        <div>admin page</div>
+        <div>
+           <p>Admin Page</p>
+        </div>
     )
 }

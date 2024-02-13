@@ -5,19 +5,19 @@ import { NextResponse } from "next/server"
 export default withAuth(
     // `withAuth` augments your `Request` with the user's token.
     function middleware(request: NextRequestWithAuth) {
-        // console.log(request.nextUrl.pathname)
-        // console.log(request.nextauth.token)
+         // console.log(request.nextUrl.pathname)
+         //console.log("token" + request.nextauth.token?.role)
 
-        if (request.nextUrl.pathname.startsWith("/extra")
-            && request.nextauth.token?.role !== "admin") {
+        if (request.nextUrl.pathname.startsWith("/issues/new")
+            && request.nextauth.token?.role !== "USER"
+            && request.nextauth.token?.role !== "ADMIN") {
             return NextResponse.rewrite(
                 new URL("/denied", request.url)
             )
         }
 
-        if (request.nextUrl.pathname.startsWith("/client")
-            && request.nextauth.token?.role !== "admin"
-            && request.nextauth.token?.role !== "manager") {
+        if (request.nextUrl.pathname.startsWith("/admin")
+            && request.nextauth.token?.role !== "ADMIN") {
             return NextResponse.rewrite(
                 new URL("/denied", request.url)
             )
@@ -28,11 +28,11 @@ export default withAuth(
             authorized: ({ token }) => !!token
         },
     }
-)
+);
 
 export const config = {
     matcher: [
-        '/issues/new',
-        '/issues/edit/:id+'
+        '/admin',
+        '/issues/new'
     ]
 }
