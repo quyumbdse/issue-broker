@@ -54,7 +54,7 @@ const IssueTable = async ({ searchParams, issues}: Props) => {
                     </Table.Cell>
                     <Table.Cell className='hidden md:table-cell'><IssueStatusBadge status={issue.status} /></Table.Cell>
                     <Table.Cell className='hidden md:table-cell'>{issue.createdAt.toDateString()}</Table.Cell>
-                    <Table.Cell className='hidden md:table-cell'>{issue.createdBy!.name}</Table.Cell>
+                    {/* <Table.Cell className='hidden md:table-cell'>{issue.createdBy!.name}</Table.Cell> */}
                 </Table.Row>)}
             </Table.Body>
         </Table.Root>
@@ -65,7 +65,7 @@ const IssueTable = async ({ searchParams, issues}: Props) => {
         { id: 1, label: 'Issue', value: 'title' },
         { id: 2, label: 'Status', value: 'status', className: 'hidden md:table-cell' },
         { id: 3, label: 'Created', value: 'createdAt', className: 'hidden md:table-cell' },
-        { id: 4, label: 'AssignTo', value: 'createdBy', className: 'hidden md:table-cell' }
+        // { id: 4, label: 'AssignTo', value: 'createdBy', className: 'hidden md:table-cell' }
     ];
 
 export const columnNames = columns.map(column => column.value);

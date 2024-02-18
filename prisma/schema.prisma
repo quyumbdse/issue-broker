@@ -18,10 +18,10 @@ model Issue {
   status           Status   @default(OPEN)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
-  createdById         String   @db.VarChar(255)
+  createdById      String   @db.VarChar(255)
   assignedToUserId String?  @db.VarChar(255)
   assignedToUser   User?    @relation(fields: [assignedToUserId], references: [id], name: "AssignedIssues")
-  createdBy           User     @relation(fields: [createdById], references: [id], name: "Issuers")
+  createdBy        User     @relation(fields: [createdById], references: [id], name: "createdBy")
 
   @@index([createdById])
   @@index([assignedToUserId])
@@ -74,7 +74,7 @@ model User {
   accounts       Account[]
   sessions       Session[]
   assignedIssues Issue[]   @relation("AssignedIssues")
-  issuers        Issue[]   @relation("Issuers")
+  createdBy        Issue[]   @relation("createdBy")
 }
 
 enum UserRole {
