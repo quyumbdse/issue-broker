@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Button, Callout, Grid, Select, TextField } from "@radix-ui/themes";
+import { Box, Button, Callout, Grid, TextField } from "@radix-ui/themes";
 import "easymde/dist/easymde.min.css";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -13,10 +13,13 @@ import ErrorMessage from "@/app/components/ErrorMessage";
 import { Spinner } from "@/app/components";
 import SimpleMDE from "react-simplemde-editor";
 import { Issue } from "@prisma/client";
+import { useSession } from "next-auth/react";
 
 type IssueFormData = z.infer<typeof patchIssueSchema>;
 
 const IssueForm = ({ issue }: { issue?: Issue }) => {
+
+    const {data: session} = useSession();
 
     const statases = [
         { label: 'OPEN', value: 'OPEN' },
@@ -77,6 +80,9 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
                         <ErrorMessage>
                             {errors.description?.message}
                         </ErrorMessage>
+                         <TextField.Root>
+                            <TextField.Input type='hidden' defaultValue={session?.user.id} {...register('createdById')} />
+                        </TextField.Root>
                         <Button disabled={!isValid || isSubmitting} >
                             {issue ? 'Update Issue' : ' Submit New Issue'} {' '}
                             {isSubmitting && <Spinner />}

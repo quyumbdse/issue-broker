@@ -6,8 +6,10 @@ CREATE TABLE `Issue` (
     `status` ENUM('OPEN', 'IN_PROGRESS', 'CLOSED') NOT NULL DEFAULT 'OPEN',
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
+    `createdById` VARCHAR(255) NOT NULL,
     `assignedToUserId` VARCHAR(255) NULL,
 
+    INDEX `Issue_createdById_idx`(`createdById`),
     INDEX `Issue_assignedToUserId_idx`(`assignedToUserId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -52,7 +54,7 @@ CREATE TABLE `User` (
     `emailVerified` DATETIME(3) NULL,
     `hashedPassword` VARCHAR(191) NULL,
     `image` VARCHAR(191) NULL,
-    `role` ENUM('ADMIN', 'USER') NOT NULL DEFAULT 'USER',
+    `role` ENUM('ADMIN', 'MANAGER', 'USER') NOT NULL DEFAULT 'USER',
 
     UNIQUE INDEX `User_email_key`(`email`),
     PRIMARY KEY (`id`)

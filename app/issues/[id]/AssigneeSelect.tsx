@@ -28,7 +28,7 @@ const AssigneeSelect = ({ issue }: { issue: Issue }) => {
                 {
                     assignedToUserId: userId || null,
                 }).catch(() => {
-                    toast.error('Changes Could not saved.')
+                    toast.error('Changes Could not saved.');
                 })
                 .then(() => {
                     axios.patch('/api/issues/' + issue.id,
@@ -42,7 +42,7 @@ const AssigneeSelect = ({ issue }: { issue: Issue }) => {
 
     return (
         <> 
-            {session?.user.role!=='ADMIN' && issue.assignedToUserId && <Select.Root
+            {/* {(session)&&session?.user.role!=='ADMIN' && issue.assignedToUserId && <Select.Root
                 defaultValue={issue.assignedToUserId}
                 onValueChange={assigneSelect}>
                 
@@ -52,19 +52,19 @@ const AssigneeSelect = ({ issue }: { issue: Issue }) => {
                             issue.assignedToUserId===user.id &&<Select.Item key={user.id}
                                 value={user.id}>{user.name}</Select.Item>)}
                 </Select.Content>
-            </Select.Root>}
+            </Select.Root>} */}
 
-            {session?.user.role==='ADMIN' && issue.assignedToUserId && <Select.Root
+            {(session)&&(session.user.role==='USER' || session.user.role==='ADMIN') && <Select.Root
                 defaultValue={issue.assignedToUserId || ""}
                 onValueChange={assigneSelect}>
                 
                 <Select.Trigger />
                 <Select.Content>
                     <Select.Group>
-                        <Select.Label>Suggestion</Select.Label>
+                        {/* <Select.Label>Suggestion</Select.Label> */}
                         <Select.Item value="">Unassigned</Select.Item>
                         {users?.map(user =>
-                         <Select.Item key={user.id}
+                         (session.user.id === user.id && session.user.id !== issue.createdById || session.user.role ==='ADMIN') && (session.user.id !== user.id && user.id !== issue.createdById || session.user.role === 'USER') &&<Select.Item key={user.id}
                                 value={user.id}>{user.name}</Select.Item>)}
                     </Select.Group>
                 </Select.Content>

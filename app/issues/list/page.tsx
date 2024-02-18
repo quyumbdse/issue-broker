@@ -2,7 +2,7 @@
 import { Flex } from '@radix-ui/themes'
 import prisma from '@/prisma/client';
 import IssueActions from './IssueActions';
-import { Issue, Status } from '@prisma/client';
+import { Status } from '@prisma/client';
 import Pagination from '@/app/components/Pagination';
 import IssueTable, { IssueQuery, columnNames } from './IssueTable';
 import { Metadata } from 'next';
@@ -25,8 +25,6 @@ const IssuesPage = async ({ searchParams}: Props) => {
     ? { [searchParams.orderBy]: searchParams.sort }
     : undefined;
   
-  
-  
   const page = parseInt(searchParams.page) || 1;
   const pageSize = 10;
   const issues = await prisma.issue.findMany({
@@ -34,7 +32,7 @@ const IssuesPage = async ({ searchParams}: Props) => {
     orderBy,
     skip: (page - 1) * pageSize,
     take: pageSize,
-    include: { assignedToUser: true },
+    include: { createdBy: true },
   });
 
   const issueCount = await prisma.issue.count({ where });

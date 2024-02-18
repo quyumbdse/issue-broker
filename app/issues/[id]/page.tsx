@@ -5,7 +5,7 @@ import EditIssueButton from "./EditIssueButton";
 import IssueDetails from "./IssueDetails";
 import DeleteIssueButton from "./DeleteIssueButton";
 import { getServerSession } from "next-auth";
-import authOptions from "@/app/auth/authOptions";
+import authOptions from "@/app/(auth)/authOptions";
 import AssigneeSelect from "./AssigneeSelect";
 import { cache } from "react";
 
@@ -32,7 +32,7 @@ const IssueDetailPage = async ({ params }: Props) => {
                 <IssueDetails issue={issue} />
             </Box>
                 {
-                (session!.user.id === issue.assignedToUserId)
+                (session)&&(session!.user.id !== issue.assignedToUserId && session!.user.role === 'USER')
                     && 
                     (<Box>
                 <Flex direction='column' gap='3'>
@@ -42,7 +42,7 @@ const IssueDetailPage = async ({ params }: Props) => {
                 </Flex>
                     </Box>)}
                 {
-                    (session!.user.role === 'ADMIN') &&
+                   (session) && (session!.user.role === 'ADMIN') &&
                      (<Box>
                 <Flex direction='column' gap='3'>
                     <AssigneeSelect issue={issue} />

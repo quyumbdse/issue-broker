@@ -5,7 +5,7 @@ import { Container, Theme } from '@radix-ui/themes';
 import "./theme-config.css";
 import "./globals.css";
 import NavBar from "./NavBar";
-import AuthProvider from "./auth/Provider";
+import AuthProvider from "./(auth)/Provider";
 import QueryClientProvider from "./QueryClientProvider";
 
 const inter = Inter({

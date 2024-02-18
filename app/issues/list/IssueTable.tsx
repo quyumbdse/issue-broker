@@ -3,20 +3,25 @@ import NextLink from 'next/link';
 import {IssueStatusBadge, Link} from '@/app/components';
 import { ArrowUpIcon, ArrowDownIcon } from '@radix-ui/react-icons';
 import { Table, TableColumnHeaderCell } from '@radix-ui/themes';
+import { getServerSession } from 'next-auth';
+import authOptions from '@/app/(auth)/authOptions';
 
 export interface IssueQuery {
     status: Status,
     orderBy: keyof Issue,
     sort: "asc" | "desc",
-    page: string
+    name: string
+    page: string,
 }
 
 interface Props {
   searchParams: IssueQuery,
-    issues: Issue[]   
+    issues: Issue[] 
 };
 
-const IssueTable = async ({ searchParams, issues }: Props) => {
+const IssueTable = async ({ searchParams, issues}: Props) => {
+
+    const session = await getServerSession(authOptions);
 
     return (
         <Table.Root variant='surface'>
@@ -28,17 +33,19 @@ const IssueTable = async ({ searchParams, issues }: Props) => {
                             
                             <NextLink href={{
                                 query: { ...searchParams, orderBy: column.value, sort: 'asc' }
-                            }}><ArrowUpIcon className='inline nav-link' /></NextLink>
+                            }}>{column.label !== 'AssignTo' && <ArrowUpIcon className='inline nav-link' />}
+                            </NextLink>
 
                             <NextLink href={{
                                 query: { ...searchParams, orderBy: column.value, sort: 'desc' }
-                            }}><ArrowDownIcon className='inline nav-link' />
+                            }}>{column.label!=='AssignTo' &&<ArrowDownIcon className='inline nav-link' />}
                             </NextLink>
                         </TableColumnHeaderCell>))}
                 </Table.Row>
             </Table.Header>
             <Table.Body>
-                {issues.map(issue => <Table.Row key={issue.id}>
+                {issues.map(issue =>
+                   (session)&& (session.user.id === issue.createdById || session.user.role ==='ADMIN' || session.user.role ==='USER') &&  <Table.Row key={issue.id}>
                     <Table.Cell>
                         <Link href={`/issues/${issue.id}`}>
                             {issue.title}
@@ -47,7 +54,7 @@ const IssueTable = async ({ searchParams, issues }: Props) => {
                     </Table.Cell>
                     <Table.Cell className='hidden md:table-cell'><IssueStatusBadge status={issue.status} /></Table.Cell>
                     <Table.Cell className='hidden md:table-cell'>{issue.createdAt.toDateString()}</Table.Cell>
-                    {/* <Table.Cell className='hidden md:table-cell'>{issue.assignedToUser!.name}</Table.Cell> */}
+                    <Table.Cell className='hidden md:table-cell'>{issue.createdBy!.name}</Table.Cell>
                 </Table.Row>)}
             </Table.Body>
         </Table.Root>
@@ -58,7 +65,7 @@ const IssueTable = async ({ searchParams, issues }: Props) => {
         { id: 1, label: 'Issue', value: 'title' },
         { id: 2, label: 'Status', value: 'status', className: 'hidden md:table-cell' },
         { id: 3, label: 'Created', value: 'createdAt', className: 'hidden md:table-cell' },
-        // { id: 4, label: 'AssignTo', className: 'hidden md:table-cell' }
+        { id: 4, label: 'AssignTo', value: 'createdBy', className: 'hidden md:table-cell' }
     ];
 
 export const columnNames = columns.map(column => column.value);

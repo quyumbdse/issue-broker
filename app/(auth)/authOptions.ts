@@ -9,6 +9,10 @@ import { UserRole } from "@prisma/client";
 
 const authOptions: NextAuthOptions = {
     adapter: PrismaAdapter(prisma),
+
+    pages: {
+        signIn: '/sign-in'
+    },
     providers: [
         GoogleProvider({
             profile(profile) {
@@ -45,9 +49,9 @@ const authOptions: NextAuthOptions = {
            
             credentials: {
                 email: { label: "email", type: "email", placeholder: "your Email" },
-                password: { label: "Password", type: "password" , placeholder: "your Password" }
-                
+                password: { label: "Password", type: "password", placeholder: "your Password" },
             },
+            
             async authorize(credentials) {
 
                 if (!credentials?.email || !credentials.password)
@@ -66,7 +70,8 @@ const authOptions: NextAuthOptions = {
 
                 return passwordsMatch ? user : null;
             },
-        })
+        }),
+        
 
     ],
     callbacks: {

@@ -6,8 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
 
@@ -18,9 +18,12 @@ model Issue {
   status           Status   @default(OPEN)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
+  createdById         String   @db.VarChar(255)
   assignedToUserId String?  @db.VarChar(255)
-  assignedToUser   User?    @relation(fields: [assignedToUserId], references: [id])
+  assignedToUser   User?    @relation(fields: [assignedToUserId], references: [id], name: "AssignedIssues")
+  createdBy           User     @relation(fields: [createdById], references: [id], name: "Issuers")
 
+  @@index([createdById])
   @@index([assignedToUserId])
 }
 
@@ -65,16 +68,18 @@ model User {
   name           String?
   email          String?   @unique
   emailVerified  DateTime?
-  hashedPassword  String?
+  hashedPassword String?
   image          String?
   role           UserRole  @default(USER)
   accounts       Account[]
   sessions       Session[]
-  assignedIssues Issue[]
+  assignedIssues Issue[]   @relation("AssignedIssues")
+  issuers        Issue[]   @relation("Issuers")
 }
 
 enum UserRole {
   ADMIN
+  MANAGER
   USER
 }
 
