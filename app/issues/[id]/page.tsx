@@ -31,8 +31,8 @@ const IssueDetailPage = async ({ params }: Props) => {
             <Box className="md:col-span-3">
                 <IssueDetails issue={issue} />
             </Box>
-                {
-                (session)&&(session!.user.id !== issue.assignedToUserId && session!.user.role === 'USER')
+                {/* {
+                (session)&&(session.user.id === issue.assignedToUserId && session!.user.role === 'USER')
                     && 
                     (<Box>
                 <Flex direction='column' gap='3'>
@@ -40,9 +40,9 @@ const IssueDetailPage = async ({ params }: Props) => {
                     <EditIssueButton issueId={issue.id} />
                     <DeleteIssueButton issueId={issue.id} />
                 </Flex>
-                    </Box>)}
+                    </Box>)} */}
                 {
-                   (session) && (session!.user.role === 'ADMIN') &&
+                   (session) &&
                      (<Box>
                 <Flex direction='column' gap='3'>
                     <AssigneeSelect issue={issue} />

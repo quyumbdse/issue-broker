@@ -43,7 +43,7 @@ const IssueTable = async ({ searchParams, issues }: Props) => {
             </Table.Header>
             <Table.Body>
                 {issues.map(issue =>
-                   (session)&& (session.user.id === issue.createdById || session.user.role ==='ADMIN' || session.user.role ==='USER') &&  <Table.Row key={issue.id}>
+                   <Table.Row key={issue.id}>
                     <Table.Cell>
                         <Link href={`/issues/${issue.id}`}>
                             {issue.title}
