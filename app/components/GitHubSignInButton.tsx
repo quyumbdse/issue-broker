@@ -6,7 +6,7 @@ interface GitHubSignInButtonProps {
   children: ReactNode;
 }
 const GitHubSignInButton: FC<GitHubSignInButtonProps> = ({ children }) => {
-  const loginWithGitHub = () => signIn("github", {callbackUrl:'http://localhost:3000'});
+  const loginWithGitHub = () => signIn("github");
 
   return (
     <Button onClick={loginWithGitHub} className='w-full'>
