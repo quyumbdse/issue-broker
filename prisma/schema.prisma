@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["relationJoins"]
 }
 
 datasource db {
@@ -20,8 +21,8 @@ model Issue {
   updatedAt        DateTime @updatedAt
   createdById      String   @db.VarChar(255)
   assignedToUserId String?  @db.VarChar(255)
-  assignedToUser   User?    @relation(fields: [assignedToUserId], references: [id], name: "AssignedIssues")
-  createdBy        User     @relation(fields: [createdById], references: [id], name: "createdBy")
+  assignedToUser   User?    @relation("AssignedIssues", fields: [assignedToUserId], references: [id])
+  createdBy        User     @relation("createdBy", fields: [createdById], references: [id])
 
   @@index([createdById])
   @@index([assignedToUserId])
@@ -74,7 +75,7 @@ model User {
   accounts       Account[]
   sessions       Session[]
   assignedIssues Issue[]   @relation("AssignedIssues")
-  createdBy        Issue[]   @relation("createdBy")
+  createdBy      Issue[]   @relation("createdBy")
 }
 
 enum UserRole {

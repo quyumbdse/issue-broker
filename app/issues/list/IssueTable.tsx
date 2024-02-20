@@ -1,6 +1,6 @@
 import { Issue, Status } from '@prisma/client';
 import NextLink from 'next/link';
-import {IssueStatusBadge, Link} from '@/app/components';
+import { IssueStatusBadge, Link } from '@/app/components';
 import { ArrowUpIcon, ArrowDownIcon } from '@radix-ui/react-icons';
 import { Table, TableColumnHeaderCell } from '@radix-ui/themes';
 import { getServerSession } from 'next-auth';
@@ -16,11 +16,11 @@ export interface IssueQuery {
 
 interface Props {
   searchParams: IssueQuery,
-    issues: Issue[] 
+    issues: Issue[]
 };
 
-const IssueTable = async ({ searchParams, issues}: Props) => {
-
+const IssueTable = async ({ searchParams, issues }: Props) => {
+   
     const session = await getServerSession(authOptions);
 
     return (
@@ -30,12 +30,10 @@ const IssueTable = async ({ searchParams, issues}: Props) => {
                     {columns.map(column => (
                         <TableColumnHeaderCell key={column.id} className={column.className}>
                             {column.label}
-                            
                             <NextLink href={{
                                 query: { ...searchParams, orderBy: column.value, sort: 'asc' }
                             }}>{column.label !== 'AssignTo' && <ArrowUpIcon className='inline nav-link' />}
                             </NextLink>
-
                             <NextLink href={{
                                 query: { ...searchParams, orderBy: column.value, sort: 'desc' }
                             }}>{column.label!=='AssignTo' &&<ArrowDownIcon className='inline nav-link' />}
