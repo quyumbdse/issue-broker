@@ -10,7 +10,7 @@ const GoogleSignInButton: FC<GoogleSignInButtonProps> = ({ children }) => {
   const loginWithGoogle = async () => {
     try {
       <Spinner/>
-      await signIn('google', {callbackUrl:'/'});
+      await signIn('google');
     } catch (error) {
       console.log(error);
     }
