@@ -48,7 +48,6 @@ const AssigneeSelect = ({ issue }: { issue: Issue }) => {
                 <Select.Trigger />
                 <Select.Content>
                     <Select.Group>
-                        <Select.Label>Suggestion</Select.Label>
                         <Select.Item value="">Unassigned</Select.Item>
                         {users?.map(user =>
                          (session.user.id === user.id && session.user.id !== issue.createdById || session.user.role ==='ADMIN') && (session.user.id !== user.id && user.id !== issue.createdById || session.user.role === 'USER') &&<Select.Item key={user.id}
