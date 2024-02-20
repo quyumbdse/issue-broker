@@ -32,7 +32,7 @@ const IssueDetailPage = async ({ params }: Props) => {
                 <IssueDetails issue={issue} />
             </Box>
                 {
-                (session)&&(session.user.id === issue.assignedToUserId && session!.user.role === 'USER')
+                (session)&&(session.user.id !== issue.assignedToUserId && session.user.role !== 'USER' || session.user.id === issue.createdById || session.user.role === 'ADMIN')
                     && 
                     (<Box>
                 <Flex direction='column' gap='3'>
@@ -42,12 +42,11 @@ const IssueDetailPage = async ({ params }: Props) => {
                 </Flex>
                     </Box>)}
                 {
-                   (session) && (session.user.role === 'ADMIN') &&
+                   (session) && (session.user.id === issue.assignedToUserId && session.user.id !== issue.createdById) &&
                      (<Box>
                 <Flex direction='column' gap='3'>
                     <AssigneeSelect issue={issue} />
                     <EditIssueButton issueId={issue.id} />
-                    <DeleteIssueButton issueId={issue.id} />
                 </Flex>
                     </Box>)
                 }
