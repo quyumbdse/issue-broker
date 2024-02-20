@@ -6,7 +6,7 @@ interface GoogleSignInButtonProps {
   children: ReactNode;
 }
 const GoogleSignInButton: FC<GoogleSignInButtonProps> = ({ children }) => {
-  const loginWithGoogle = () => signIn('google', {callbackUrl:'http://localhost:3000'});
+  const loginWithGoogle = () => signIn('google', {callbackUrl:'https://issue-broker.vercel.app'});
 
   return (
     <Button onClick={loginWithGoogle} className='w-full'>
