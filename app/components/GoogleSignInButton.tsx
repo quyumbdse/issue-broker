@@ -1,7 +1,6 @@
 import { FC, ReactNode } from 'react';
 import { Button } from './ui/button';
 import { signIn } from 'next-auth/react';
-import Spinner from './Spinner';
 
 interface GoogleSignInButtonProps {
   children: ReactNode;
@@ -9,8 +8,7 @@ interface GoogleSignInButtonProps {
 const GoogleSignInButton: FC<GoogleSignInButtonProps> = ({ children }) => {
   const loginWithGoogle = async () => {
     try {
-      <Spinner/>
-      await signIn('google');
+      await signIn('google', {callbackUrl:'http://localhost:3000'});
     } catch (error) {
       console.log(error);
     }

@@ -10,9 +10,9 @@ import { UserRole } from "@prisma/client";
 const authOptions: NextAuthOptions = {
     adapter: PrismaAdapter(prisma),
 
-    pages: {
-        signIn: '/sign-in'
-    },
+    // pages: {
+    //     signIn: '/sign-in'
+    // },
     providers: [
         GoogleProvider({
             profile(profile) {
