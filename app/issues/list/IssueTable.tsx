@@ -3,8 +3,6 @@ import NextLink from 'next/link';
 import { IssueStatusBadge, Link } from '@/app/components';
 import { ArrowUpIcon, ArrowDownIcon } from '@radix-ui/react-icons';
 import { Table, TableColumnHeaderCell } from '@radix-ui/themes';
-import { getServerSession } from 'next-auth';
-import authOptions from '@/app/(auth)/authOptions';
 
 export interface IssueQuery {
     status: Status,
@@ -20,8 +18,6 @@ interface Props {
 };
 
 const IssueTable = async ({ searchParams, issues }: Props) => {
-   
-    const session = await getServerSession(authOptions);
 
     return (
         <Table.Root variant='surface'>
