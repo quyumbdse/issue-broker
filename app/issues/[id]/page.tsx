@@ -31,15 +31,26 @@ const IssueDetailPage = async ({ params }: Props) => {
             <Box className="md:col-span-3">
                 <IssueDetails issue={issue} />
             </Box>
-                {(session) &&
+                {
+                (session)&&(session.user.id === issue.assignedToUserId && session!.user.role === 'USER')
+                    && 
+                    (<Box>
+                <Flex direction='column' gap='3'>
+                    <AssigneeSelect issue={issue} />
+                    <EditIssueButton issueId={issue.id} />
+                    <DeleteIssueButton issueId={issue.id} />
+                </Flex>
+                    </Box>)}
+                {
+                   (session) && (session.user.role === 'ADMIN') &&
                      (<Box>
                 <Flex direction='column' gap='3'>
                     <AssigneeSelect issue={issue} />
                     <EditIssueButton issueId={issue.id} />
                     <DeleteIssueButton issueId={issue.id} />
                 </Flex>
-                    </Box>
-                    )}
+                    </Box>)
+                }
         </ Grid >
         </>  
     );

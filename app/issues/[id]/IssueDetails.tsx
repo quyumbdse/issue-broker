@@ -1,4 +1,3 @@
-import authOptions from '@/app/(auth)/authOptions';
 import { IssueStatusBadge } from '@/app/components';
 import { Issue } from '@prisma/client';
 import { Flex, Text, Heading, Card } from '@radix-ui/themes'
