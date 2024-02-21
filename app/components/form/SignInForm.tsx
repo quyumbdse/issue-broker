@@ -95,7 +95,7 @@ const SignInForm = () => {
       </div>
       <div className='space-y-5'>
         <GoogleSignInButton>Sign in with Google</GoogleSignInButton>
-        <GitHubSignInButton>Sign in with GitHub</GitHubSignInButton>
+        {/* <GitHubSignInButton>Sign in with GitHub</GitHubSignInButton> */}
       </div>
      
       
