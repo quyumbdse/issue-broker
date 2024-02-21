@@ -7,7 +7,7 @@ const LatestIssues = async () => {
     const issues = await prisma.issue.findMany({
         orderBy: { createdAt: 'desc' },
         take: 5,
-        include: { assignedToUser: true, createdBy: true },
+        include: { assignedToUser: true},
     })
     return (
         <Card>
@@ -21,7 +21,7 @@ const LatestIssues = async () => {
                                     <Flex direction='column' align='start' gap='2'>
                                         <Flex gap= '9'>
                                             <Link className="nav-link" href={`/issues/${issue.id}`}>{issue.title}</Link>
-                                         <p className="text-zinc-400">{issue.createdBy.name}</p>
+                                         {/* <p className="text-zinc-400">{issue.createdBy.name}</p> */}
                                         </Flex>
                                         <IssueStatusBadge status={issue.status} />
                                        
