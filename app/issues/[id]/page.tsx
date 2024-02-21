@@ -42,7 +42,7 @@ const IssueDetailPage = async ({ params }: Props) => {
                 </Flex>
                     </Box>)}
                 {
-                   (session) && (session.user.id !== issue.createdById && session.user.role === 'USER') &&
+                   (session) && (session.user.id !== issue.createdById && session.user.role === 'USER' && issue.status!=='CLOSED') &&
                      (<Box>
                 <Flex direction='column' gap='3'>
                     <AssigneeSelect issue={issue} />
