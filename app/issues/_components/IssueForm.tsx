@@ -12,7 +12,7 @@ import { patchIssueSchema } from "@/app/validationSchema";
 import ErrorMessage from "@/app/components/ErrorMessage";
 import { Spinner } from "@/app/components";
 import SimpleMDE from "react-simplemde-editor";
-import { Issue } from "@prisma/client";
+import { Issue, Status } from "@prisma/client";
 import { useSession } from "next-auth/react";
 
 type IssueFormData = z.infer<typeof patchIssueSchema>;
@@ -21,11 +21,6 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
 
     const {data: session} = useSession();
 
-    const statases = [
-        { label: 'OPEN', value: 'OPEN' },
-        { label: 'IN_PROGRESS', value: 'IN_PROGRESS' },
-        { label: 'CLOSED', value: 'CLOSED' }
-    ]
     const router = useRouter()
     const [error, setError] = useState('');
     const [isSubmitting, setSubmitting] = useState(false);
@@ -43,10 +38,18 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
 
         try {
             setSubmitting(true);
-            if (issue)
-                await axios.patch('/api/issues/' + issue.id, {status: 'CLOSED', data});
-            else
-                await axios.post('/api/issues', data);
+            if (issue?.createdById === session?.user.id) {
+                await axios.patch('/api/issues/' + issue?.id, data);
+            } else if (issue?.assignedToUserId === session?.user.id) {
+                await axios.patch('/api/issues/' + issue?.id, {
+                    status: Status.CLOSED,
+                    title: data.title,
+                    description: data.description
+                });
+            } else {
+                 await axios.post('/api/issues', data);
+            }
+               
             router.push('/issues/list');
             router.refresh();
         } catch (error) {
@@ -84,7 +87,7 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
                             <TextField.Input type='hidden' defaultValue={session?.user.id} {...register('createdById')} />
                         </TextField.Root>
                         <Button disabled={!isValid || isSubmitting} >
-                            {issue ? 'Update Issue' : ' Submit New Issue'} {' '}
+                            {issue?.assignedToUserId===session?.user.id ? 'Done Issue' : '' || issue?.createdById === session?.user.id || session?.user.role ==='ADMIN'? 'Update Issue': '' || !issue ? 'Submit new Issue':''} {' '}
                             {isSubmitting && <Spinner />}
                         </Button>
                     </Box>

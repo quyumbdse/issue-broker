@@ -8,6 +8,7 @@ import { getServerSession } from "next-auth";
 import authOptions from "@/app/(auth)/authOptions";
 import AssigneeSelect from "./AssigneeSelect";
 import { cache } from "react";
+import { Status, UserRole } from "@prisma/client";
 
 interface Props {
     params: {id: string}
@@ -32,21 +33,21 @@ const IssueDetailPage = async ({ params }: Props) => {
                 <IssueDetails issue={issue} />
             </Box>
                 {
-                (session)&&(session.user.id !== issue.assignedToUserId && session.user.role !== 'USER' || session.user.id === issue.createdById || session.user.role === 'ADMIN')
+                (session)&& issue.status!==Status.CLOSED && (session.user.id !== issue.assignedToUserId && session.user.role !== UserRole.USER || session.user.id === issue.createdById || session.user.role === UserRole.ADMIN)
                     && 
                     (<Box>
                 <Flex direction='column' gap='3'>
                     <AssigneeSelect issue={issue} />
-                    <EditIssueButton issueId={issue.id} />
+                            <EditIssueButton issueId={issue.id} issue={ issue} />
                     <DeleteIssueButton issueId={issue.id} />
                 </Flex>
                     </Box>)}
                 {
-                   (session) && (session.user.id !== issue.createdById && session.user.role === 'USER' && issue.status!=='CLOSED') &&
+                   (session) && (session.user.id !== issue.createdById && session.user.role === UserRole.USER && issue.status!==Status.CLOSED) &&
                      (<Box>
                 <Flex direction='column' gap='3'>
                     <AssigneeSelect issue={issue} />
-                    {session.user.id === issue.assignedToUserId && <EditIssueButton issueId={issue.id} />}
+                    {session.user.id === issue.assignedToUserId && <EditIssueButton issueId={issue.id} issue={ issue} />}
                 </Flex>
                     </Box>)
                 }

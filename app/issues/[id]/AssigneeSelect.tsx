@@ -1,6 +1,6 @@
 'use client'
 import { Skeleton } from '@/app/components';
-import { Issue, User } from '@prisma/client';
+import { Issue, Status, User, UserRole } from '@prisma/client';
 import { Select } from '@radix-ui/themes'
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
@@ -21,7 +21,7 @@ const AssigneeSelect = ({ issue }: { issue: Issue }) => {
     if (error) return null;
 
     const assigneSelect = (userId: string) => {
-        if (issue.assignedToUserId === null && issue.status !== 'CLOSED')
+        if (issue.assignedToUserId === null && issue.status !== Status.CLOSED)
             
             axios.patch('/api/issues/' + issue.id,
                
@@ -32,7 +32,7 @@ const AssigneeSelect = ({ issue }: { issue: Issue }) => {
                 })
                 .then(() => {
                     axios.patch('/api/issues/' + issue.id,
-                        { status: 'IN_PROGRESS' });
+                        { status: Status.IN_PROGRESS });
                     router.push('/issues/list');
                     router.refresh();
                 });
@@ -42,30 +42,16 @@ const AssigneeSelect = ({ issue }: { issue: Issue }) => {
 
     return (
         <> 
-            {/* {(session)&&session?.user.role!=='ADMIN' && issue.assignedToUserId && <Select.Root
-                defaultValue={issue.assignedToUserId}
-                onValueChange={assigneSelect}>
-                
-                <Select.Trigger />
-                <Select.Content>
-                        {users?.map(user =>
-                            issue.assignedToUserId===user.id &&<Select.Item key={user.id}
-                                value={user.id}>{user.name}</Select.Item>)}
-                </Select.Content>
-            </Select.Root>} */}
-
-            {(session)&&(session.user.role==='USER' || session.user.role==='ADMIN') && <Select.Root
+            {(session)&&(session.user.role===UserRole.USER || session.user.role===UserRole.ADMIN) && <Select.Root
                 defaultValue={issue.assignedToUserId || ""}
                 onValueChange={assigneSelect}>
-                
                 <Select.Trigger />
                 <Select.Content>
                     <Select.Group>
-                        {/* <Select.Label>Suggestion</Select.Label> */}
                         <Select.Item value="">Unassigned</Select.Item>
                         {users?.map(user =>
-                         (session.user.id === user.id && session.user.id !== issue.createdById || session.user.role ==='ADMIN') && (session.user.id !== user.id && user.id !== issue.createdById || session.user.role === 'USER') &&<Select.Item key={user.id}
-                                value={user.id}>{user.name}</Select.Item>)}
+                         (session.user.id === user.id && session.user.id !== issue.createdById || session.user.role ===UserRole.ADMIN) && (session.user.id !== user.id && user.id !== issue.createdById || session.user.role === UserRole.USER) &&<Select.Item key={user.id}
+                            value={user.id}>{user.name}</Select.Item>)}
                     </Select.Group>
                 </Select.Content>
             </Select.Root>}
