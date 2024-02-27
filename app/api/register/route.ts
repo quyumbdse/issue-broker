@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
     })
 
     resend.emails.send({
-        from: 'onbording@resend.dev',
+        from: RESEND_DOMAIN,
         to: newUser.email!,
         subject: 'Activate account Request',
         
