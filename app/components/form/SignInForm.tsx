@@ -19,6 +19,7 @@ import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import GitHubSignInButton from '../GitHubSignInButton';
 import toast, { Toaster } from 'react-hot-toast';
+import { useState } from 'react';
 
 const FormSchema = z.object({
   email: z.string().min(1, 'Email is required').email('Invalid email'),
@@ -29,6 +30,7 @@ const FormSchema = z.object({
 });
 
 const SignInForm = () => {
+  const [error, setError] = useState<string>('');
   const router = useRouter();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -39,24 +41,26 @@ const SignInForm = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
-    const signInData = await signIn('credentials', {
+    try {
+      const res = await signIn('credentials', {
       email: values.email,
       password: values.password,
       redirect: false
-    });
-    if (signInData?.error) {
-      toast.error('Please activate your account.')
+      });
+      
+    if (res?.error) {
+      setError(res.error)
     } else {
-      router.push('/');
+      router.push('/')
     }
-   
+    } catch (error: any) {}
   };
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className='w-full'>
         <div className='space-y-2'>
-            <Toaster/>
+          {error && <p className='text-red-600'>{ error }</p>}
           <FormField
             control={form.control}
             name='email'

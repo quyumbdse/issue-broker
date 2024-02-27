@@ -53,6 +53,7 @@ export async function POST(request: NextRequest) {
 
         For security reasons, this link is only valid for four hours.`,
     });
-
+    
     return NextResponse.json({ email: newUser.email });
+   
 }

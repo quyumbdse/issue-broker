@@ -17,6 +17,9 @@ import Link from 'next/link';
 import GoogleSignInButton from '../GoogleSignInButton';
 import { useRouter } from 'next/navigation';
 import GitHubSignInButton from '../GitHubSignInButton';
+import toast from 'react-hot-toast';
+import { useState } from 'react';
+import { DividerHorizontalIcon } from '@radix-ui/react-icons';
 
 const FormSchema = z
   .object({
@@ -34,6 +37,7 @@ const FormSchema = z
   });
 
 const SignUpForm = () => {
+  const [error, setError] = useState('')
   const router = useRouter();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -46,23 +50,26 @@ const SignUpForm = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
-    const response = await fetch('/api/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        name: values.name,
-        email: values.email,
-        password: values.password
+    try {
+      const res = await fetch('/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: values.name,
+          email: values.email,
+          password: values.password
+        })
       })
-    }) 
-
-    if (response.ok) {
-      router.push('/sign-in');
-    } else {
-      console.log('Registration faild');
-    }
+      if (res.ok) {
+        router.push('/api/register/success');
+      } else {
+        setError((await res.json()).error);
+      }  
+    } catch (error: any) {
+      setError(error!.message)
+    };
   };
 
   return (
@@ -95,6 +102,7 @@ const SignUpForm = () => {
               </FormItem>
             )}
           />
+           {error && <p className='text-red-500'>{error}</p>}
           <FormField
             control={form.control}
             name='password'
@@ -129,6 +137,7 @@ const SignUpForm = () => {
               </FormItem>
             )}
           />
+       
         </div>
         <Button className='w-full mt-6' type='submit'>
           Sign up

@@ -66,8 +66,9 @@ const authOptions: NextAuthOptions = {
                 if (!user) return null;
               
                     if (!user.emailVerified) {
-                    throw new Error('user need to activate email')
-                }
+                    throw new Error('please check your email to activate account')
+                    }
+                
                 const passwordsMatch = await bcrypt.compare(
                     credentials.password,
                     user.hashedPassword!

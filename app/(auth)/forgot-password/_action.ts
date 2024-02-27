@@ -41,7 +41,7 @@ export async function resetPassword(data: z.infer<typeof FormSchema>) {
     })
 
     resend.emails.send({
-        from: 'onbording@resend.dev',
+        from: RESEND_DOMAIN,
         to: user.email!,
         subject: 'Reset Password Request',
         text: `Hello ${user.name}, someone (hopefully you) requested a password reset for this account. If you did want to reset your password, please click here: ${PROTOCOL}://${DOMAIN}/password-reset/${token.token}
