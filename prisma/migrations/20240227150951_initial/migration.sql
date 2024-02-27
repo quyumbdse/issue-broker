@@ -51,12 +51,25 @@ CREATE TABLE `User` (
     `id` VARCHAR(191) NOT NULL,
     `name` VARCHAR(191) NULL,
     `email` VARCHAR(191) NULL,
-    `emailVerified` DATETIME(3) NULL,
+    `emailVerified` BOOLEAN NOT NULL DEFAULT false,
     `hashedPassword` VARCHAR(191) NULL,
     `image` VARCHAR(191) NULL,
     `role` ENUM('ADMIN', 'MANAGER', 'USER') NOT NULL DEFAULT 'USER',
 
     UNIQUE INDEX `User_email_key`(`email`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `UserActivateToken` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `token` VARCHAR(191) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `activatedAt` DATETIME(3) NULL,
+    `userId` VARCHAR(191) NOT NULL,
+
+    UNIQUE INDEX `UserActivateToken_token_key`(`token`),
+    INDEX `UserActivateToken_userId_idx`(`userId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -68,4 +81,17 @@ CREATE TABLE `VerificationToken` (
 
     UNIQUE INDEX `VerificationToken_token_key`(`token`),
     UNIQUE INDEX `VerificationToken_identifier_token_key`(`identifier`, `token`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `PasswordResetToken` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `token` VARCHAR(191) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `resetAt` DATETIME(3) NULL,
+    `userId` VARCHAR(191) NOT NULL,
+
+    UNIQUE INDEX `PasswordResetToken_token_key`(`token`),
+    INDEX `PasswordResetToken_userId_idx`(`userId`),
+    PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

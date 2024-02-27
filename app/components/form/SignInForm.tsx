@@ -18,6 +18,7 @@ import GoogleSignInButton from '../GoogleSignInButton';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import GitHubSignInButton from '../GitHubSignInButton';
+import toast, { Toaster } from 'react-hot-toast';
 
 const FormSchema = z.object({
   email: z.string().min(1, 'Email is required').email('Invalid email'),
@@ -44,7 +45,7 @@ const SignInForm = () => {
       redirect: false
     });
     if (signInData?.error) {
-      console.log(signInData.error);
+      toast.error('Please activate your account.')
     } else {
       router.push('/');
     }
@@ -55,6 +56,7 @@ const SignInForm = () => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className='w-full'>
         <div className='space-y-2'>
+            <Toaster/>
           <FormField
             control={form.control}
             name='email'
@@ -86,6 +88,13 @@ const SignInForm = () => {
             )}
           />
         </div>
+         
+      <p className='text-center text-sm text-gray-600 mt-2'>
+        &nbsp;
+        <Link className='text-blue-500 hover:underline' href='/forgot-password'>
+          Forgot your password?
+        </Link>
+      </p>
         <Button className='w-full mt-6' type='submit'>
           Sign in
         </Button>
@@ -97,8 +106,6 @@ const SignInForm = () => {
         <GoogleSignInButton>Sign in with Google</GoogleSignInButton>
         {/* <GitHubSignInButton>Sign in with GitHub</GitHubSignInButton> */}
       </div>
-     
-      
       <p className='text-center text-sm text-gray-600 mt-2'>
         If you don&apos;t have an account, please&nbsp;
         <Link className='text-blue-500 hover:underline' href='/sign-up'>
@@ -106,6 +113,7 @@ const SignInForm = () => {
         </Link>
       </p>
     </Form>
+   
   );
 };
 

@@ -6,8 +6,10 @@ import prisma from "@/prisma/client";
 import { NextAuthOptions  } from "next-auth";
 import bcrypt from 'bcrypt';
 import { UserRole } from "@prisma/client";
+import { useState } from "react";
 
 const authOptions: NextAuthOptions = {
+   
     adapter: PrismaAdapter(prisma),
 
     pages: {
@@ -62,7 +64,10 @@ const authOptions: NextAuthOptions = {
                 });
 
                 if (!user) return null;
-
+              
+                    if (!user.emailVerified) {
+                    throw new Error('user need to activate email')
+                }
                 const passwordsMatch = await bcrypt.compare(
                     credentials.password,
                     user.hashedPassword!
@@ -71,9 +76,8 @@ const authOptions: NextAuthOptions = {
                 return passwordsMatch ? user : null;
             },
         }),
-        
-
     ],
+    
     callbacks: {
         async jwt({ token, user, session}) {
             if (user)
