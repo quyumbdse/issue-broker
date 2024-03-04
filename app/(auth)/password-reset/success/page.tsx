@@ -7,7 +7,7 @@ import { useEffect } from 'react'
 
 const SuccessPage = () => {
 
-    const router = useRouter()
+  const router = useRouter();
     useEffect(() => {
         setTimeout(() => {
             router.push('/') // Redirect to login page
@@ -25,7 +25,7 @@ const SuccessPage = () => {
             again.
           </p>
           <Button type="submit" asChild>
-            <Link href="/">Return to Login</Link>
+            <Link href="/sign-in">Return to Login</Link>
           </Button>
         </Flex>
       </Card>

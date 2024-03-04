@@ -68,5 +68,5 @@ export async function resetPassword(token: string, data: z.infer<typeof FormSche
             error: `An unexpected error occured. Please try again and if the problem persists, contact support.`,
         }
     }
-    redirect('/password-reset/success')
+    // redirect('/password-reset/success')
 }

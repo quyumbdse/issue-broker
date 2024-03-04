@@ -9,7 +9,7 @@ export default async function SuccessPage() {
           <h1 className="text-2xl font-light">Password reset</h1>
           <p>If the email `&doesn`;t show up, check your spam folder.</p>
           <Button type="submit" asChild>
-            <Link href="/">Return to Login</Link>
+            <Link href="/sign-in">Return to Login</Link>
           </Button>
         </Flex>
       </Card>

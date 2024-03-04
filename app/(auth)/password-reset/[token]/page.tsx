@@ -15,6 +15,8 @@ import { Input } from '@/app/components/ui/input';
 import { Button } from '@/app/components/ui/button';
 import { resetPassword } from '@/app/(auth)/password-reset/[token]/_actions';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Spinner } from '@/app/components';
 
 const FormSchema = z.object({
     password: z
@@ -29,6 +31,10 @@ const FormSchema = z.object({
   });
 
 const ResetPasswordForm = ({ params }: { params: { token: string } }) => {
+  const router = useRouter();
+  const [error, setError] = useState('');
+  const [isSubmitting, setSubmitting] = useState(false);
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -37,13 +43,17 @@ const ResetPasswordForm = ({ params }: { params: { token: string } }) => {
     },
   });
 
-  const [error, setError] = useState('')
   async function submit(values: z.infer<typeof FormSchema>) {
     try {
-       await resetPassword(params.token, values)
-    } catch (error) {
-      setError('An un expected error occured');
-    }
+      setSubmitting(true);
+      const res = await resetPassword(params.token, values);
+      if (res?.error) {
+        setError(res?.error);
+        setSubmitting(false);
+      } else {
+        router.push('/password-reset/success');
+      }
+    } catch (error) {}
   }
 
   return (
@@ -87,8 +97,8 @@ const ResetPasswordForm = ({ params }: { params: { token: string } }) => {
           />
               </div>
               {error && <p className="text-red-500 text-sm">{error}</p>}
-        <Button className='w-full mt-6' type='submit'>
-          Reset Password
+        <Button disabled={ isSubmitting} className='w-full mt-6' type='submit'>
+         {' Reset Password '} {' '} {isSubmitting && <Spinner />}
         </Button>
       </form>
     </Form>

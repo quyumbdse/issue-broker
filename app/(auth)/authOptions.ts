@@ -80,7 +80,7 @@ const authOptions: NextAuthOptions = {
     ],
     
     callbacks: {
-        async jwt({ token, user, session}) {
+        async jwt({ token, user}) {
             if (user)
                 return {
                     ...token,
@@ -91,7 +91,7 @@ const authOptions: NextAuthOptions = {
         },
         
         // way to put property into the session (db to jwt token to  session)
-        async session({ session, token, user }) {
+        async session({ session, token}) {
             if (session?.user) return {
                 ...session,
                 user: {

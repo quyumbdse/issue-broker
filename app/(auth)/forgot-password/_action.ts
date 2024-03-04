@@ -51,5 +51,5 @@ export async function resetPassword(data: z.infer<typeof FormSchema>) {
        If you did not request this reset, please ignore this email.`,
     });
 
-    redirect('/forgot-password/success')
+    //redirect('/forgot-password/success')
 }

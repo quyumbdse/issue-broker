@@ -18,7 +18,6 @@ import GoogleSignInButton from '../GoogleSignInButton';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import GitHubSignInButton from '../GitHubSignInButton';
-import toast, { Toaster } from 'react-hot-toast';
 import { useState } from 'react';
 
 const FormSchema = z.object({
