@@ -20,6 +20,7 @@ import GitHubSignInButton from '../GitHubSignInButton';
 import toast from 'react-hot-toast';
 import { useState } from 'react';
 import { DividerHorizontalIcon } from '@radix-ui/react-icons';
+import Spinner from '../Spinner';
 
 const FormSchema = z
   .object({
@@ -37,7 +38,8 @@ const FormSchema = z
   });
 
 const SignUpForm = () => {
-  const [error, setError] = useState('')
+  const [error, setError] = useState('');
+  const [isLoading, setLoading] = useState(false);
   const router = useRouter();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -51,6 +53,7 @@ const SignUpForm = () => {
 
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
     try {
+      setLoading(true);
       const res = await fetch('/api/register', {
         method: 'POST',
         headers: {
@@ -66,9 +69,11 @@ const SignUpForm = () => {
         router.push('/api/register/success');
       } else {
         setError((await res.json()).error);
+        setLoading(false);
       }  
     } catch (error: any) {
       setError(error!.message)
+      setLoading(false);
     };
   };
 
@@ -139,8 +144,8 @@ const SignUpForm = () => {
           />
        
         </div>
-        <Button className='w-full mt-6' type='submit'>
-          Sign up
+        <Button disabled={isLoading} className='w-full mt-6' type='submit'>
+          Sign up {isLoading && <Spinner/>}
         </Button>
       </form>
       <div className='mx-auto my-4 flex w-full items-center justify-evenly before:mr-4 before:block before:h-px before:flex-grow before:bg-stone-400 after:ml-4 after:block after:h-px after:flex-grow after:bg-stone-400'>

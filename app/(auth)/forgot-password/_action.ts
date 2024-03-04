@@ -53,6 +53,4 @@ export async function resetPassword(data: z.infer<typeof FormSchema>) {
     } catch (error) {
         throw new Error('Faild to send the verification email.');
     }
-    
-    //redirect('/forgot-password/success')
-}
+};
