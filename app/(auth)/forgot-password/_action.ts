@@ -37,15 +37,22 @@ export async function resetPassword(data: z.infer<typeof FormSchema>) {
             token: `${randomUUID()}${randomUUID()}`.replace(/-/g, ''),
         },
     })
-
-    resend.emails.send({
-        from: 'onbording@resend.dev',
-        to: user.email!,
-        subject: 'Reset Password Request',
-        text: `Hello ${user.name}, someone (hopefully you) requested a password reset for this account. If you did want to reset your password, please click here: ${PROTOCOL}://${DOMAIN}/password-reset/${token.token}
+    try {
+        const result = await resend.emails.send({
+            from: 'onbording@resend.dev',
+            to: user.email!,
+            subject: 'Reset Password Request',
+            text: `Hello ${user.name}, someone (hopefully you) requested a password reset for this account. If you did want to reset your password, please click here: ${PROTOCOL}://${DOMAIN}/password-reset/${token.token}
 
         For security reasons, this link is only valid for four hours.
     
        If you did not request this reset, please ignore this email.`,
-    });
+        })
+        return {success: true, result}
+
+    } catch (error) {
+        throw new Error('Faild to send the verification email.')
+    }
+    
+    //redirect('/forgot-password/success')
 }
