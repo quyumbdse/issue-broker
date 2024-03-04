@@ -43,16 +43,19 @@ export async function POST(request: NextRequest) {
         },
     })
 
-    resend.emails.send({
-        from: 'onbording@resend.dev',
-        to: newUser.email!,
-        subject: 'Activate account Request',
+    try {
+        await resend.emails.send({
+            from: 'onbording@resend.dev',
+            to: newUser.email!,
+            subject: 'Activate account Request',
+            text: `Hello ${newUser.name},  
+            There is the link to activate your email,
+            please click here: ${PROTOCOL}://${DOMAIN}/activate/${token.token}
+            For security reasons, this link is only valid for four hours.`,
+        });
         
-        text: `Hello ${newUser.name},  There is the link to activate your email, please click here: ${PROTOCOL}://${DOMAIN}/activate/${token.token}
-
-        For security reasons, this link is only valid for four hours.`,
-    });
-    
-    return NextResponse.json({ email: newUser.email });
-   
-}
+        return NextResponse.json({ email: newUser.email });
+    } catch (error) {
+        throw new Error('Faild to send the verification email.');
+    }
+};
