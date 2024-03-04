@@ -2,7 +2,6 @@
 
 import prisma from '@/prisma/client'
 import { hash } from 'bcrypt'
-import { redirect } from 'next/navigation'
 import * as z from 'zod';
 
 const FormSchema = z.object({
@@ -68,5 +67,5 @@ export async function resetPassword(token: string, data: z.infer<typeof FormSche
             error: `An unexpected error occured. Please try again and if the problem persists, contact support.`,
         }
     }
-    // redirect('/password-reset/success')
-}
+    
+};

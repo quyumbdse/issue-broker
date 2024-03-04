@@ -6,7 +6,6 @@ import { randomUUID } from "crypto";
 import { Resend } from 'resend'
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const RESEND_DOMAIN = 'onbording@resend.dev';
 const DOMAIN = process.env.DOMAIN || 'localhost:3000'
 const PROTOCOL = process.env.NODE_ENV === 'production' ? 'https' : 'http'
 
@@ -45,7 +44,7 @@ export async function POST(request: NextRequest) {
     })
 
     resend.emails.send({
-        from: RESEND_DOMAIN,
+        from: 'onbording@resend.dev',
         to: newUser.email!,
         subject: 'Activate account Request',
         

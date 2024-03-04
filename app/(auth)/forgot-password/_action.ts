@@ -4,10 +4,8 @@ import prisma from '@/prisma/client'
 import { randomUUID } from 'crypto'
 import { Resend } from 'resend'
 import * as z from 'zod';
-import { redirect } from 'next/navigation'
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const RESEND_DOMAIN = 'onbording@resend.dev';
 const DOMAIN = process.env.DOMAIN || 'localhost:3000'
 const PROTOCOL = process.env.NODE_ENV === 'production' ? 'https' : 'http'
 
@@ -41,7 +39,7 @@ export async function resetPassword(data: z.infer<typeof FormSchema>) {
     })
 
     resend.emails.send({
-        from: RESEND_DOMAIN,
+        from: 'onbording@resend.dev',
         to: user.email!,
         subject: 'Reset Password Request',
         text: `Hello ${user.name}, someone (hopefully you) requested a password reset for this account. If you did want to reset your password, please click here: ${PROTOCOL}://${DOMAIN}/password-reset/${token.token}
@@ -50,6 +48,4 @@ export async function resetPassword(data: z.infer<typeof FormSchema>) {
     
        If you did not request this reset, please ignore this email.`,
     });
-
-    //redirect('/forgot-password/success')
 }
