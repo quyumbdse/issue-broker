@@ -19,6 +19,7 @@ import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import GitHubSignInButton from '../GitHubSignInButton';
 import { useState } from 'react';
+import Spinner from '../Spinner';
 
 const FormSchema = z.object({
   email: z.string().min(1, 'Email is required').email('Invalid email'),
@@ -30,6 +31,7 @@ const FormSchema = z.object({
 
 const SignInForm = () => {
   const [error, setError] = useState<string>('');
+  const [isLoading, setLoading] = useState(false);
   const router = useRouter();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -41,25 +43,27 @@ const SignInForm = () => {
 
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
     try {
+      setLoading(true);
       const res = await signIn('credentials', {
       email: values.email,
       password: values.password,
       redirect: false
       });
       
-    if (res?.error) {
-      setError(res.error)
+      if (res?.error) {
+        setError(res?.error);
+        setLoading(false);
     } else {
-      router.push('/')
-    }
+        router.push('/');
+      } 
     } catch (error: any) {}
   };
 
   return (
     <Form {...form}>
+          {error && <p className='text-red-600 mb-5'>{ error }</p>}
       <form onSubmit={form.handleSubmit(onSubmit)} className='w-full'>
         <div className='space-y-2'>
-          {error && <p className='text-red-600'>{ error }</p>}
           <FormField
             control={form.control}
             name='email'
@@ -98,8 +102,8 @@ const SignInForm = () => {
           Forgot your password?
         </Link>
       </p>
-        <Button className='w-full mt-6' type='submit'>
-          Sign in
+        <Button disabled={isLoading} className='w-full mt-6' type='submit'>
+          Sign in {isLoading && <Spinner/>}
         </Button>
       </form>
       <div className='mx-auto my-4 flex w-full items-center justify-evenly before:mr-4 before:block before:h-px before:flex-grow before:bg-stone-400 after:ml-4 after:block after:h-px after:flex-grow after:bg-stone-400'>
@@ -107,7 +111,7 @@ const SignInForm = () => {
       </div>
       <div className='space-y-5'>
         <GoogleSignInButton>Sign in with Google</GoogleSignInButton>
-        {/* <GitHubSignInButton>Sign in with GitHub</GitHubSignInButton> */}
+        <GitHubSignInButton>Sign in with GitHub</GitHubSignInButton>
       </div>
       <p className='text-center text-sm text-gray-600 mt-2'>
         If you don&apos;t have an account, please&nbsp;

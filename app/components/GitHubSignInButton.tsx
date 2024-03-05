@@ -9,7 +9,7 @@ const GitHubSignInButton: FC<GitHubSignInButtonProps> = ({ children }) => {
   const loginWithGitHub = () => signIn("github",  {callbackUrl: 'http://localhost:3000'});
 
   return (
-    <Button onClick={loginWithGitHub} className='w-full'>
+    <Button disabled onClick={loginWithGitHub} className='w-full'>
       {children}
     </Button>
   );

@@ -63,16 +63,23 @@ const authOptions: NextAuthOptions = {
                     where: { email: credentials.email },
                 });
 
-                if (!user) return null;
+                if (!user?.email) {
+                    throw new Error('The email is not registered.');
+                };
+                
               
-                    if (!user.emailVerified) {
-                    throw new Error('please check your email to activate account')
-                    }
+                if (!user.emailVerified) {
+                    throw new Error('Check your email to activate account.');
+                };
                 
                 const passwordsMatch = await bcrypt.compare(
                     credentials.password,
                     user.hashedPassword!
                 );
+
+                if (!passwordsMatch) {
+                    throw new Error('The password is not correct.');
+                }
 
                 return passwordsMatch ? user : null;
             },

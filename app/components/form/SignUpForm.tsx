@@ -17,9 +17,7 @@ import Link from 'next/link';
 import GoogleSignInButton from '../GoogleSignInButton';
 import { useRouter } from 'next/navigation';
 import GitHubSignInButton from '../GitHubSignInButton';
-import toast from 'react-hot-toast';
 import { useState } from 'react';
-import { DividerHorizontalIcon } from '@radix-ui/react-icons';
 import Spinner from '../Spinner';
 
 const FormSchema = z

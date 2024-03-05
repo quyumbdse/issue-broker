@@ -27,7 +27,7 @@ export async function resetPassword(data: z.infer<typeof FormSchema>) {
 
     if (!user) {
         return {
-            error: 'This email is not registered',
+            error: 'The email is not registered',
         }
     }
 

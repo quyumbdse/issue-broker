@@ -50,6 +50,7 @@ const ForgotPasswordForm = () => {
 
   return (
     <Form {...form}>
+       {error && <p className="text-red-500 text-sm mb-5">{error}</p>}
       <form onSubmit={form.handleSubmit(onSubmit)} className='w-full'>
           <FormField
             control={form.control}
@@ -64,7 +65,6 @@ const ForgotPasswordForm = () => {
               </FormItem>
             )}
         />
-         {error && <p className="text-red-500 text-sm">{error}</p>}
         <Button disabled={ isSubmitting} className='w-full mt-6' type='submit'>
          {' Reset Password '} {' '} {isSubmitting && <Spinner/>}
         </Button>
