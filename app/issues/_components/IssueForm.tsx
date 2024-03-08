@@ -19,7 +19,7 @@ type IssueFormData = z.infer<typeof patchIssueSchema>;
 
 const IssueForm = ({ issue }: { issue?: Issue }) => {
 
-    const {data: session} = useSession();
+    const { data: session } = useSession();
 
     const router = useRouter()
     const [error, setError] = useState('');

@@ -30,7 +30,7 @@ const NavBar = () => {
 };
 
 const NavLinks = () => {
-    const { status, data: session } = useSession();
+    const { data: session } = useSession();
     const currentPath = usePathname();
 
     const links = [
@@ -42,7 +42,7 @@ const NavLinks = () => {
     return (
         <>
         <ul className="flex space-x-6">
-            {links.map(link => (
+                {links.map(link => (
                 <li key={link.href}>
                     <Link className={classnames({
                         'nav-link' : true,
@@ -77,7 +77,7 @@ const AuthStatus = () => {
                             size='2'
                             radius="full"
                             className="cursor-pointer"
-                                referrerPolicy="no-referrer" />
+                            referrerPolicy="no-referrer" />
                     </Text>
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Content>

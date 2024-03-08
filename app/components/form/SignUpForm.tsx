@@ -150,8 +150,8 @@ const SignUpForm = () => {
         or
       </div>
       <div className='space-y-5'>
-        <GoogleSignInButton>Sign up with Google</GoogleSignInButton>
-        <GitHubSignInButton>Sign up with GitHub</GitHubSignInButton>
+        <GoogleSignInButton>Sign in with Google</GoogleSignInButton>
+        <GitHubSignInButton>Sign in with GitHub</GitHubSignInButton>
       </div>
       <p className='text-center text-sm text-gray-600 mt-2'>
         If you don&apos;t have an account, please&nbsp;

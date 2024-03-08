@@ -6,7 +6,7 @@ export default withAuth(
     // `withAuth` augments your `Request` with the user's token.
     function middleware(request: NextRequestWithAuth) {
          // console.log(request.nextUrl.pathname)
-         //console.log("token" + request.nextauth.token?.role)
+        // console.log("token" + request.nextauth.token?.role)
 
         if (request.nextUrl.pathname.startsWith("/issues/new")
             && request.nextauth.token?.role !== "USER"

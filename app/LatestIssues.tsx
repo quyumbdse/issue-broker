@@ -2,6 +2,7 @@ import prisma from "@/prisma/client"
 import { Avatar, Card, Flex, Heading, Table } from "@radix-ui/themes"
 import Link from "next/link"
 import { IssueStatusBadge } from "./components"
+import { IoPersonCircleOutline } from "react-icons/io5";
 
 const LatestIssues = async () => {
     const issues = await prisma.issue.findMany({
@@ -28,10 +29,10 @@ const LatestIssues = async () => {
                                     </Flex>
                                     {issue.assignedToUserId && (
                                         <Avatar
-                                            src={issue.assignedToUser!.image!}
-                                            fallback='?'
-                                            size='2'
-                                            radius='full' />
+                                        src={issue.assignedToUser!.image!}
+                                        fallback=<IoPersonCircleOutline/>
+                                        size='2'
+                                        radius='full' />
                                     )}
                                 </Flex>
                             </Table.Cell>
